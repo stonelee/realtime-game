@@ -12,41 +12,33 @@ app.get('/', function(req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
-var personList = [];
+var persons = {};
 io.sockets.on('connection', function(socket) {
   socket.emit('welcome');
 
-  socket.emit('person list', personList);
-  socket.on('set person', function(person) {
-    socket.set('name', person.name, function() {
-      personList.push(person);
-      socket.emit('person ready', person);
-      socket.broadcast.emit('new person ready', person);
+  socket.emit('person list', persons);
+  socket.on('set person', function(data) {
+    socket.set('name', data.name, function() {
+      persons[data.name] = data;
+      socket.emit('person ready', data);
+      socket.broadcast.emit('new person ready', data);
     });
   });
 
-  socket.on('person left', function(data) {
+  socket.on('move', function(data) {
     socket.get('name', function(err, name) {
       if (data.name === name) {
-        socket.emit('person left ready', data);
-        socket.broadcast.emit('other person left ready', data);
-      };
-    });
-  });
-  socket.on('person right', function(data) {
-    socket.get('name', function(err, name) {
-      if (data.name === name) {
-        socket.emit('person right ready', data);
-        socket.broadcast.emit('other person right ready', data);
+        persons[name].left = data.left;
+        persons[name].top = data.top;
+        socket.emit('move ready', data);
+        socket.broadcast.emit('other move ready', data);
       };
     });
   });
 
   socket.on('disconnect', function() {
     socket.get('name', function(err, name) {
-      personList = _.reject(personList, function(person) {
-        return person.name == name;
-      });
+      delete persons[name];
       socket.broadcast.emit('person quit', name);
     });
   });

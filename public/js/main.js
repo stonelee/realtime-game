@@ -10,39 +10,19 @@ $(function() {
     maxTop = $container.height() - 50;
 
   function createPerson(person) {
-    var p= $('<div class="person" id="' + person.name + '">' + person.name + '</div>').appendTo($container);
+    var p = $('<div class="person" id="' + person.name + '">' + person.name + '</div>').appendTo($container);
     p.css({
       left: person.left,
       top: person.top,
     }).show();
     return p;
   }
-  function moveLeft(data){
-    var p = $('#'+data.name);
-    var oldLeft = parseFloat(p.css('left'));
-    var newLeft = oldLeft - data.distance;
-    if (newLeft > 0) {
-      p.css('left', newLeft);
-    } else {
-      p.css('left', 0);
-    }
-  }
-  function moveRight(data){
-    var p = $('#'+data.name);
-    var oldLeft = parseFloat(p.css('left'));
-    var newLeft = oldLeft + data.distance;
-    if (newLeft < maxLeft) {
-      p.css('left', newLeft);
-    } else {
-      p.css('left', maxLeft);
-    }
-  }
 
   socket.on('welcome', function() {
-    socket.on('person list', function(personList) {
-      $.each(personList, function() {
-        createPerson(this);
-      });
+    socket.on('person list', function(persons) {
+      for (var p in persons) {
+        createPerson(persons[p]);
+      }
     });
 
     socket.emit('set person', {
@@ -61,30 +41,43 @@ $(function() {
     });
 
     $('#left').click(function() {
-      socket.emit('person left',{
-        name:$person[0].id,
-        distance:distance
+      var oldLeft = parseFloat($person.css('left'));
+      var newLeft = oldLeft - distance;
+      if (newLeft < 0) newLeft = 0;
+      var newTop = parseFloat($person.css('top'));
+
+      socket.emit('move', {
+        name: $person[0].id,
+        left: newLeft,
+        top: newTop
       });
     })
-    socket.on('person left ready', function(data) {
-      moveLeft(data);
+    $('#right').click(function() {
+      var oldLeft = parseFloat($person.css('left'));
+      var newLeft = oldLeft + distance;
+      if (newLeft > maxLeft) newLeft = maxLeft;
+      var newTop = parseFloat($person.css('top'));
+
+      socket.emit('move', {
+        name: $person[0].id,
+        left: newLeft,
+        top: newTop
+      });
+    })
+    socket.on('move ready', function(data) {
+      move(data);
     });
-    socket.on('other person left ready', function(data) {
-      moveLeft(data);
+    socket.on('other move ready', function(data) {
+      move(data);
     });
 
-    $('#right').click(function() {
-      socket.emit('person right',{
-        name:$person[0].id,
-        distance:distance
+    function move(data) {
+      var p = $('#' + data.name);
+      p.css({
+        left: data.left,
+        top: data.top
       });
-    })
-    socket.on('person right ready', function(data) {
-      moveRight(data);
-    });
-    socket.on('other person right ready', function(data) {
-      moveRight(data);
-    });
+    }
 
   });
 
