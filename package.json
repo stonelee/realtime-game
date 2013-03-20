@@ -1,0 +1,19 @@
+{
+  "name": "game",
+  "description": "A game demo",
+  "version": "0.0.1",
+  "private": false,
+  "author": "Stone Lee <istonelee@gmail.com> (http://stonelee.info)",
+  "engines": {
+    "node": "0.8.6",
+    "npm": "1.1.48"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon server.js"
+  },
+  "dependencies": {
+    "express": "latest",
+    "socket.io": "latest",
+    "nodemon": "latest"
+  }
+}
