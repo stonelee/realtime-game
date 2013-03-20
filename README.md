@@ -3,7 +3,7 @@ A realtime game demo useing socket.io
 ##Install
 
 ```sh
-  $ git clone git://github.com/stonelee/realtime-game.git
+  $ git clone https://github.com/stonelee/realtime-game.git
   $ cd realtime-game
   $ npm install
   $ npm start
