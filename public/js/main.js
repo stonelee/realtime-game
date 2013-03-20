@@ -3,7 +3,7 @@ $(function() {
 
   var distance = 100;
 
-  var socket = io.connect('http://localhost');
+  var socket = io.connect('http://10.10.22.84');
 
   var $person;
   var maxLeft = $container.width() - 50,
