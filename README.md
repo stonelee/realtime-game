@@ -11,12 +11,10 @@ A realtime game demo useing socket.io
 
 ##Play
 
-Open the web browser, visit http://localhost:3000
+Open the web browser, visit [http://localhost:3000/](http://localhost:3000/)
 
-You will get one rect automatically.
-Press the button to control it.
-Or use arrow keys on the keyboard.
+You will get one rect automatically, press the button to control it, or use arrow keys on the keyboard.
 
-Open other web browser, or use your phone, visit http://someip:3000
+Open other web browser, or use your phone, visit [http://someip:3000/](http://localhost:3000/)
 
 Then you can get other rect, and control it freely.
