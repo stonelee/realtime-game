@@ -4,6 +4,9 @@
   "version": "0.0.1",
   "private": false,
   "author": "Stone Lee <istonelee@gmail.com> (http://stonelee.info)",
+  "engines": {
+    "node": "0.8.6"
+  },
   "scripts": {
     "start": "./node_modules/.bin/nodemon server.js"
   },
