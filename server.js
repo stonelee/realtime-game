@@ -1,5 +1,4 @@
 var express = require('express'),
-  _ = require('underscore'),
   app = express(),
   server = require('http').createServer(app),
   io = require('socket.io').listen(server);

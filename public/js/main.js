@@ -1,9 +1,8 @@
 $(function() {
   var $container = $('#container');
 
-  var distance = 100;
-
-  var socket = io.connect('http://10.10.22.84');
+  var hostname = location.hostname;
+  var socket = io.connect('http://' + hostname);
 
   var $person;
   var maxLeft = $container.width() - 50,
@@ -42,7 +41,8 @@ $(function() {
     });
 
     function getPosition(direction) {
-      var oldLeft = parseFloat($person.css('left')),
+      var distance = 100,
+        oldLeft = parseFloat($person.css('left')),
         oldTop = parseFloat($person.css('top'));
       switch (direction) {
       case 'left':

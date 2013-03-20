@@ -1,6 +1,6 @@
 {
-  "name": "game",
-  "description": "A game demo",
+  "name": "realtime-game",
+  "description": "A realtime game demo",
   "version": "0.0.1",
   "private": false,
   "author": "Stone Lee <istonelee@gmail.com> (http://stonelee.info)",
@@ -14,7 +14,6 @@
   "dependencies": {
     "express": "latest",
     "socket.io": "latest",
-    "underscore": "latest",
     "nodemon": "latest"
   }
 }
