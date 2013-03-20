@@ -25,6 +25,23 @@ io.sockets.on('connection', function(socket) {
     });
   });
 
+  socket.on('person left', function(data) {
+    socket.get('name', function(err, name) {
+      if (data.name === name) {
+        socket.emit('person left ready', data);
+        socket.broadcast.emit('other person left ready', data);
+      };
+    });
+  });
+  socket.on('person right', function(data) {
+    socket.get('name', function(err, name) {
+      if (data.name === name) {
+        socket.emit('person right ready', data);
+        socket.broadcast.emit('other person right ready', data);
+      };
+    });
+  });
+
   socket.on('disconnect', function() {
     socket.get('name', function(err, name) {
       personList = _.reject(personList, function(person) {
