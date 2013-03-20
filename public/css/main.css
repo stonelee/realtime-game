@@ -17,6 +17,10 @@
   background:#ccc;
 }
 
+#name {
+  float:left;
+}
+
 #control {
   position:relative;
   margin-top: 10px;

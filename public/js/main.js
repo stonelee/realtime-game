@@ -32,6 +32,7 @@ $(function() {
     });
     socket.on('person ready', function(person) {
       $person = createPerson(person);
+      $('#name span').text(person.name);
     });
     socket.on('new person ready', function(person) {
       createPerson(person);
@@ -75,8 +76,7 @@ $(function() {
       }
     }
 
-    function triggerBtn(btn) {
-      var direction = $(btn)[0].id;
+    function triggerMove(direction) {
       var p = getPosition(direction);
 
       socket.emit('move', {
@@ -96,7 +96,8 @@ $(function() {
 
 
     $('#control button').click(function() {
-      triggerBtn(this);
+      var direction = $(this)[0].id;
+      triggerMove(direction);
     })
     socket.on('move ready', function(data) {
       move(data);
@@ -104,6 +105,18 @@ $(function() {
     socket.on('other move ready', function(data) {
       move(data);
     });
+
+    $(document).keydown(function(e) {
+      var directions = {
+        '37': 'left',
+        '38': 'up',
+        '39': 'right',
+        '40': 'down'
+      }
+      var direction = directions[e.which];
+      triggerMove(direction);
+      return false;
+    })
 
   });
 
