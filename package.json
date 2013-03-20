@@ -14,6 +14,7 @@
   "dependencies": {
     "express": "latest",
     "socket.io": "latest",
+    "underscore": "latest",
     "nodemon": "latest"
   }
 }

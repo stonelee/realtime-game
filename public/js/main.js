@@ -1,14 +1,5 @@
 $(function() {
-  var $person = $('#person'),
-    $container = $('#container');
-
-  var maxLeft = $container.width() - $person.width(),
-    maxTop = $container.height() - $person.height();
-
-  $person.css({
-    left: Math.random() * maxLeft,
-    top: Math.random() * maxTop,
-  }).show();
+  var $container = $('#container');
 
   var distance = 100;
   $('#left').click(function() {
@@ -31,9 +22,40 @@ $(function() {
   })
 
   var socket = io.connect('http://localhost');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
+
+  var maxLeft = $container.width() - 50,
+    maxTop = $container.height() - 50;
+
+  function createPerson(person) {
+    var $person = $('<div class="person" id="' + person.name + '">' + person.name + '</div>').appendTo($container);
+    $person.css({
+      left: person.left,
+      top: person.top,
+    }).show();
+  }
+
+  socket.on('welcome', function() {
+    socket.on('person list', function(personList) {
+      $.each(personList, function() {
+        createPerson(this);
+      });
+    });
+
+    socket.emit('set person', {
+      name: Math.round(Math.random() * 1000),
+      left: Math.random() * maxLeft,
+      top: Math.random() * maxTop
+    });
+    socket.on('person ready', function(person) {
+      createPerson(person);
+    });
+    socket.on('new person ready', function(person) {
+      createPerson(person);
+    });
+    socket.on('person quit', function(name) {
+      $('#' + name).remove();
+    });
+
   });
 
 });
