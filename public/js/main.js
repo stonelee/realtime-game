@@ -40,36 +40,51 @@ $(function() {
       $('#' + name).remove();
     });
 
-    $('#left').click(function() {
-      var oldLeft = parseFloat($person.css('left'));
-      var newLeft = oldLeft - distance;
-      if (newLeft < 0) newLeft = 0;
-      var newTop = parseFloat($person.css('top'));
+    function getPosition(direction) {
+      var oldLeft = parseFloat($person.css('left')),
+        oldTop = parseFloat($person.css('top'));
+      switch (direction) {
+      case 'left':
+        var newLeft = oldLeft - distance;
+        if (newLeft < 0) newLeft = 0;
+        return {
+          left: newLeft,
+          top: oldTop
+        }
+      case 'right':
+        var newLeft = oldLeft + distance;
+        if (newLeft > maxLeft) newLeft = maxLeft;
+        return {
+          left: newLeft,
+          top: oldTop
+        }
+      case 'up':
+        var newTop = oldTop - distance;
+        if (newTop < 0) newTop = 0;
+        return {
+          left: oldLeft,
+          top: newTop
+        }
+      case 'down':
+        var newTop = oldTop + distance;
+        if (newTop > maxTop) newTop = maxTop;
+        return {
+          left: oldLeft,
+          top: newTop
+        }
+      }
+    }
+
+    function triggerBtn(btn) {
+      var direction = $(btn)[0].id;
+      var p = getPosition(direction);
 
       socket.emit('move', {
         name: $person[0].id,
-        left: newLeft,
-        top: newTop
+        left: p.left,
+        top: p.top
       });
-    })
-    $('#right').click(function() {
-      var oldLeft = parseFloat($person.css('left'));
-      var newLeft = oldLeft + distance;
-      if (newLeft > maxLeft) newLeft = maxLeft;
-      var newTop = parseFloat($person.css('top'));
-
-      socket.emit('move', {
-        name: $person[0].id,
-        left: newLeft,
-        top: newTop
-      });
-    })
-    socket.on('move ready', function(data) {
-      move(data);
-    });
-    socket.on('other move ready', function(data) {
-      move(data);
-    });
+    }
 
     function move(data) {
       var p = $('#' + data.name);
@@ -78,6 +93,17 @@ $(function() {
         top: data.top
       });
     }
+
+
+    $('#control button').click(function() {
+      triggerBtn(this);
+    })
+    socket.on('move ready', function(data) {
+      move(data);
+    });
+    socket.on('other move ready', function(data) {
+      move(data);
+    });
 
   });
 

@@ -24,14 +24,27 @@
       }
 
       #control {
+        position:relative;
         margin-top: 10px;
         text-align: center;
       }
       #control button{
+        position:absolute;
         margin: 0 20px;
         width: 80px;
         height: 40px;
         font-size: 20px;
+      }
+      #left {
+        left: 350px;
+        top: 50px;
+      }
+      #right {
+        left: 600px;
+        top: 50px;
+      }
+      #down {
+        top: 100px;
       }
     </style>
   </head>
@@ -39,8 +52,10 @@
     <div id="wrapper">
       <div id="container"></div>
       <div id="control">
+        <button id="up">up</button>
         <button id="left">left</button>
         <button id="right">right</button>
+        <button id="down">down</button>
       </div>
     </div>
 
